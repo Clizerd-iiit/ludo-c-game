@@ -1,0 +1,18 @@
+{
+  "name": "ludo-game",
+  "version": "1.0.0",
+  "description": "Multiplayer Ludo Game powered by C Language Core Logic",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "gcc -O2 c_src/ludo.c -o ludo_engine",
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": ["ludo", "c-language", "socket.io", "multiplayer", "render"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}

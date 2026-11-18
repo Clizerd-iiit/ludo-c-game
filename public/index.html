@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ludo Champion - C Engine Powered</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="logo-icon">🎲</span>
+                <div class="logo-text">
+                    <h1>LUDO C-MASTER</h1>
+                    <span class="badge">Powered by C Language</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button id="btn-c-info" class="btn-secondary" title="View C Engine Details">ℹ️ C Logic</button>
+                <button id="btn-mute" class="btn-icon" title="Toggle Sound">🔊</button>
+                <button id="btn-restart" class="btn-icon" title="Restart Game">🔄</button>
+            </div>
+        </header>
+
+        <!-- Mode Selection Tabs -->
+        <div class="mode-tabs">
+            <button id="tab-offline" class="tab-btn active">📱 Offline Pass & Play</button>
+            <button id="tab-online" class="tab-btn">🌐 Online Multiplayer</button>
+        </div>
+
+        <!-- Online Lobby Banner (Hidden by default) -->
+        <div id="online-lobby" class="online-lobby card hidden">
+            <div class="lobby-controls">
+                <div class="input-group">
+                    <input type="text" id="player-name" placeholder="Enter Your Name" maxlength="12" value="Player 1">
+                </div>
+                <div class="btn-row">
+                    <button id="btn-create-room" class="btn-primary">➕ Create Room</button>
+                    <div class="join-box">
+                        <input type="text" id="room-code-input" placeholder="CODE" maxlength="6">
+                        <button id="btn-join-room" class="btn-secondary">Join</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="room-info" class="room-info hidden">
+                <div class="room-code-badge">
+                    <span>Room Code:</span>
+                    <strong id="display-room-code">----</strong>
+                    <button id="btn-copy-code" class="btn-small">📋 Copy</button>
+                </div>
+                <div class="room-players-list">
+                    <span>Players in Room:</span>
+                    <div id="players-chips" class="players-chips"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <main class="game-layout">
+            <!-- Left / Board Section -->
+            <section class="board-section">
+                <!-- Status Banner -->
+                <div class="status-banner" id="status-banner">
+                    <span id="turn-indicator-dot" class="dot dot-red"></span>
+                    <span id="status-text">Red's Turn - Roll the Dice!</span>
+                </div>
+
+                <!-- 15x15 Ludo Board Container -->
+                <div class="board-wrapper">
+                    <div id="ludo-board" class="ludo-board">
+                        <!-- Board grid generated via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right / Controls & Chat Section -->
+            <section class="controls-section">
+                <!-- Dice & Turn Card -->
+                <div class="card dice-card">
+                    <div class="current-player-banner" id="player-turn-banner">
+                        <div class="avatar-ring red" id="current-player-ring">
+                            <span id="current-player-icon">🔴</span>
+                        </div>
+                        <div class="turn-labels">
+                            <span class="label-sub">Current Turn</span>
+                            <span class="label-main" id="current-player-name">RED PLAYER</span>
+                        </div>
+                    </div>
+
+                    <!-- 3D Interactive Dice -->
+                    <div class="dice-area">
+                        <div class="dice-box" id="dice-element" title="Click to Roll Dice">
+                            <div class="dice dice-1" id="dice-visual">
+                                <span class="dot-face"></span>
+                            </div>
+                        </div>
+                        <button id="btn-roll-dice" class="btn-roll">🎲 ROLL DICE</button>
+                    </div>
+
+                    <div class="dice-hint" id="dice-hint">
+                        Tip: Any number (1 to 6) opens a token! Rolling a 6 gives an extra turn!
+                    </div>
+                </div>
+
+                <!-- Score / Tokens Summary Card -->
+                <div class="card score-card">
+                    <h3>🏆 Tokens Home</h3>
+                    <div class="score-grid">
+                        <div class="score-item red"><span class="tag">Red</span> <strong id="score-red">0/4</strong></div>
+                        <div class="score-item green"><span class="tag">Green</span> <strong id="score-green">0/4</strong></div>
+                        <div class="score-item yellow"><span class="tag">Yellow</span> <strong id="score-yellow">0/4</strong></div>
+                        <div class="score-item blue"><span class="tag">Blue</span> <strong id="score-blue">0/4</strong></div>
+                    </div>
+                </div>
+
+                <!-- Quick Chat / Reactions (Visible in Online mode) -->
+                <div class="card chat-card hidden" id="chat-card">
+                    <h3>💬 Quick Reactions</h3>
+                    <div class="quick-reactions">
+                        <button class="btn-reaction" data-msg="👋 Hello!">👋</button>
+                        <button class="btn-reaction" data-msg="🎲 Good luck!">🍀</button>
+                        <button class="btn-reaction" data-msg="🔥 Nice Move!">🔥</button>
+                        <button class="btn-reaction" data-msg="😭 Oops!">😭</button>
+                        <button class="btn-reaction" data-msg="⏱️ Roll fast!">⚡</button>
+                        <button class="btn-reaction" data-msg="🎉 GG!">🏆</button>
+                    </div>
+                    <div id="chat-messages" class="chat-messages"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- C Engine Explanation Modal (For Viva / Teacher) -->
+    <div id="c-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ C Language Architecture & Viva Guide</h2>
+                <button id="btn-close-modal" class="btn-close">✖</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Sir/Teacher Explanation Summary:</strong></p>
+                <ul>
+                    <li><strong>Language:</strong> Standard C (C99), compiled with <code>gcc -O2 ludo.c -o ludo_engine</code>.</li>
+                    <li><strong>Data Structures:</strong>
+                        <ul>
+                            <li><code>struct Player</code>: Tracks 4 tokens (step -1 to 56) and home count.</li>
+                            <li><code>struct GameState</code>: Encapsulates turn, dice, safe spots, and win state.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Core Mechanics in C:</strong>
+                        <ul>
+                            <li><code>roll_dice()</code>: Generates random dice rolls 1 to 6.</li>
+                            <li><code>can_move_token()</code>: Validates if token can exit base or advance.</li>
+                            <li><code>move_token()</code>: Performs token movement, captures opponents on non-safe tiles, checks home arrival, and grants bonus turn on 6.</li>
+                            <li><code>get_common_tile()</code>: Maps relative step to global 52-tile ring using <code>(start_tile + step) % 52</code>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Web & Cloud Bridge:</strong> Node.js server executes the compiled C binary via <code>child_process.execFile</code> and syncs multiplayer state across Socket.io clients.</li>
+                </ul>
+                <div class="viva-badge">
+                    Full line-by-line viva notes available in <code>docs/VIVA_EXPLANATION.md</code>!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Winner Celebration Modal -->
+    <div id="winner-modal" class="modal hidden">
+        <div class="modal-content celebration">
+            <h1 class="confetti">🎉🏆🎉</h1>
+            <h2 id="winner-title">PLAYER HAS WON!</h2>
+            <p id="winner-desc">All 4 tokens reached home successfully!</p>
+            <button id="btn-play-again" class="btn-primary">Play Again 🔄</button>
+        </div>
+    </div>
+
+    <!-- Socket.io Client Library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Frontend Game Logic Script -->
+    <script src="game.js"></script>
+</body>
+</html>

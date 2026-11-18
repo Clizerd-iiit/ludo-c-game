@@ -1,0 +1,4 @@
+node_modules/
+ludo_engine
+.DS_Store
+*.log
